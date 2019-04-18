@@ -29,6 +29,8 @@ import com.gc.materialdesign.widgets.Dialog;
 import com.google.gson.Gson;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -40,12 +42,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     private Toolbar toolbar;
     private FloatingActionButton fab;
-    private FloatingActionButton height;
+    private FloatingActionButton heightbutton;
     private FloatingActionButton refresh;
     private ProgressBarCircularIndeterminate progressBarCircularIndeterminate;
     private TextView satellite;
     private TextView status;
     private TextView accuracy;
+
     private TextView currentSpeed;
     private TextView maxSpeed;
     private TextView averageSpeed;
@@ -54,6 +57,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     private Data.OnGpsServiceUpdate onGpsServiceUpdate;
 
     private boolean firstfix;
+    private ArrayList<Location> locations=new ArrayList<>();
+    private TextView height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,19 +78,20 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         refresh = (FloatingActionButton) findViewById(R.id.refresh);
         refresh.setVisibility(View.INVISIBLE);
 
-        height=(FloatingActionButton) findViewById(R.id.fabButton);
+        heightbutton=(FloatingActionButton) findViewById(R.id.fabButton);
         fab.setVisibility(View.INVISIBLE);
-
+        height=(TextView) findViewById(R.id. height);
 
 
         ///
-        height.setOnClickListener(new View.OnClickListener() {
+        heightbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                Intent intent1=new Intent(MainActivity.this, MapActivity.class);
                startActivity(intent1);
             }
         });
+
         ///
 
         onGpsServiceUpdate = new Data.OnGpsServiceUpdate() {
@@ -129,6 +135,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 s = new SpannableString(String.format("%.3f %s", distanceTemp, distanceUnits));
                 s.setSpan(new RelativeSizeSpan(0.5f), s.length() - distanceUnits.length() - 1, s.length(), 0);
                 distance.setText(s);
+
+                double altitude = data.getAltitude();
+                String altitudeUnits="m";
+                s=new SpannableString(String.format("%.3f %s", altitude, altitudeUnits));
+                height.setText(s);
             }
         };
 
@@ -270,7 +281,19 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             if(id==R.id.action_settings){
                 Intent intents = new Intent(this, MapsViewActivity.class);
+                ArrayList<Location> locations=this.locations;
+                int locationscount=locations.size();
+                double[]lats=new double[locationscount];
+
+                double[]lngs=new double[locationscount];
+                for(int i=0; i<locationscount; i++){
+                    lats[i]=locations.get(i).getLatitude();
+                    lngs[i]=locations.get(i).getLongitude();
+                }
+                intents.putExtra("lats", lats);
+                intents.putExtra("lngs", lngs);
                 startActivity(intents);
+
             //}
         }
         else {
@@ -284,6 +307,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
+        locations.add(location);
+
         if (location.hasAccuracy()) {
             double acc = location.getAccuracy();
             String units;

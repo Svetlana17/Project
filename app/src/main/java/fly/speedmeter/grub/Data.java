@@ -8,12 +8,20 @@ public class Data {
     private long time;
     private long timeStopped;
     private boolean isFirstTime;
-
+    private double altitude;
     private double distanceM;
     private double curSpeed;
     private double maxSpeed;
 
     private OnGpsServiceUpdate onGpsServiceUpdate;
+
+    public double getAltitude() {
+       return altitude;
+    }
+
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
+    }
 
     public interface OnGpsServiceUpdate{
         public void update();

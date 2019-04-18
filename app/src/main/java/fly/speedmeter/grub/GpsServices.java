@@ -55,8 +55,11 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
                 lastLat = currentLat;
                 lastLon = currentLon;
                 data.setFirstTime(false);
-            }
 
+            }
+            if(location.hasAltitude()) {
+                data.setAltitude(location.getAltitude());
+            }
             lastlocation.setLatitude(lastLat);
             lastlocation.setLongitude(lastLon);
             double distance = lastlocation.distanceTo(location);

@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+    <android.support.v7.widget.Toolbar
+        style="@style/ToolBarStyle"
+        android:id="@+id/toolbar"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="@dimen/abc_action_bar_default_height_material"
+        android:elevation="5dp">
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/toolbarSpeed"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_gravity="center"
+        android:background="@color/red"
+        android:elevation="5dp">
+
+
+
+
+</RelativeLayout>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fabdistanse"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="right"
+        android:layout_marginLeft="295dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="126dp"
+        android:onClick="onFabClick"
+        android:src="@drawable/abc_btn_switch_to_on_mtrl_00012"
+        fab:fab_colorNormal="@color/red"
+        fab:fab_colorPressed="@color/red_dark"
+        fab:fab_colorRipple="@color/ripple_material_light" />
+</RelativeLayout>

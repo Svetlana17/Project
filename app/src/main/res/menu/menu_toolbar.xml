@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+    <item
+    android:id="@+id/gps"
+    android:icon="@android:drawable/ic_menu_preferences"
+    android:title="@string/gps"
+    app:showAsAction="never" />
+    <item
+        android:id="@+id/sensor"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/sensor"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/main"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/main"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/langutude"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/langutude"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/map"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/map"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_sensor_list"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/gps"
+        app:showAsAction="never" />
+
+</menu>

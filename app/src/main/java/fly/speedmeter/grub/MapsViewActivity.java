@@ -1,7 +1,10 @@
 package fly.speedmeter.grub;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -9,6 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsViewActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -42,5 +46,20 @@ public class MapsViewActivity extends FragmentActivity implements OnMapReadyCall
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        Intent intent = getIntent();
+
+        double [] lats= intent.getDoubleArrayExtra("lats");
+        double [] lngs= intent.getDoubleArrayExtra("lngs");
+        if(lats.length>0 && lngs.length>0) {
+            PolylineOptions polylineOptions=new PolylineOptions();
+            for (int i = 0; i < lats.length; i++) {
+                polylineOptions.add(new LatLng(lats[i], lngs[i]));
+            }
+            googleMap.addPolyline(polylineOptions);
+            polylineOptions.color(ContextCompat.getColor(this, R.color.polyline_color));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lats[0], lngs[0]),16 ));
+        }
+
     }
 }
