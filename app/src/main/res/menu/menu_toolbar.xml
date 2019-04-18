@@ -38,5 +38,16 @@
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/gps"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/mapActivityGis"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/mapActivityGis"
+        app:showAsAction="never" />
+
+
+
+
+
+
 
 </menu>

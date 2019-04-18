@@ -52,4 +52,7 @@
     <string name="ref">ref</string>
     <string name="options">options</string>
     <string name="title_activity_maps_view">Map</string>
+    <string name="ANS">Automated navigation system</string>
+    <string name="mapActivityGis">GisView</string>
+
 </resources>
