@@ -40,6 +40,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     private Toolbar toolbar;
     private FloatingActionButton fab;
+    private FloatingActionButton height;
     private FloatingActionButton refresh;
     private ProgressBarCircularIndeterminate progressBarCircularIndeterminate;
     private TextView satellite;
@@ -71,6 +72,21 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         refresh = (FloatingActionButton) findViewById(R.id.refresh);
         refresh.setVisibility(View.INVISIBLE);
+
+        height=(FloatingActionButton) findViewById(R.id.fabButton);
+        fab.setVisibility(View.INVISIBLE);
+
+
+
+        ///
+        height.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               Intent intent1=new Intent(MainActivity.this, MapActivity.class);
+               startActivity(intent1);
+            }
+        });
+        ///
 
         onGpsServiceUpdate = new Data.OnGpsServiceUpdate() {
             @Override

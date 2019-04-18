@@ -10,11 +10,12 @@ import android.preference.PreferenceGroup;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 /**
  * Created by fly on 19/04/15.
  */
-public class Settings extends ActionBarActivity {
+public class Settings extends ActionBarActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,11 @@ public class Settings extends ActionBarActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     public static class SettingsFragment extends PreferenceFragment {
