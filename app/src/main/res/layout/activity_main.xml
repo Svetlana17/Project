@@ -20,7 +20,7 @@
     <RelativeLayout
         android:id="@+id/toolbarSpeed"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/toolbar"
         android:layout_gravity="center"
         android:background="@color/red"
@@ -30,22 +30,21 @@
             android:id="@+id/progressBarCircularIndeterminate"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:elevation="10dp"
-            android:background="@color/white"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"/>
+            android:background="@color/white"
+            android:elevation="10dp" />
 
         <TextView
             android:id="@+id/currentSpeed"
-            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="100sp"
+            android:text=""
             android:textColor="@android:color/white"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"/>
+            android:textSize="90sp" />
 
     </RelativeLayout>
 
@@ -268,9 +267,31 @@
         android:layout_marginTop="38dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:text="Height"
+        android:text="@string/height"
         android:textColor="@android:color/black"
         android:textSize="17sp" />
+    <TextView
+        android:id="@+id/heights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleAccuracy"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="17sp" />
+    <View
+        android:id="@+id/separator7"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_lighter"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/heights"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 
     <View
         android:id="@+id/separator5"
@@ -329,21 +350,36 @@
         android:layout_below="@+id/separator6"
         android:layout_centerHorizontal="true" />
 
-
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fabButton"
-
+    <Button
+        android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="right"
-        android:onClick="onFabClick"
-        android:layout_marginLeft="295dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/abc_btn_switch_to_on_mtrl_00012"
-        fab:fab_colorNormal="@color/red"
-        fab:fab_colorPressed="@color/red_dark"
-        fab:fab_colorRipple="@color/ripple_material_light" />
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/heights"
+        android:layout_marginBottom="-64dp"
+        android:background="@color/blue_light"
+        android:text="Start" />
+
+    <Button
+        android:id="@+id/buttonStop"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/heights"
+        android:layout_marginLeft="45dp"
+        android:layout_marginBottom="-69dp"
+        android:layout_toRightOf="@+id/buttonStart"
+        android:background="@color/blue_light"
+        android:text="Stop" />
+
+    <Button
+        android:id="@+id/buttonMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/heights"
+        android:layout_marginLeft="66dp"
+        android:layout_marginBottom="-66dp"
+        android:layout_toRightOf="@+id/buttonStop"
+        android:background="@color/blue_light"
+        android:text="Send" />
+
 
 </RelativeLayout>

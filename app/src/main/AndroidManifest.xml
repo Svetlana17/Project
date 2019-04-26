@@ -14,9 +14,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".Mappakage.GisMap"></activity>
+        <activity android:name=".filecsv.WritterActivity"></activity>
+        <activity android:name=".Mappakage.GisMap" />
         <activity android:name=".LocationShare.MapActivityGis" />
-        <activity android:name=".ActivityStart"></activity>
+        <activity android:name=".ActivityStart" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,7 +35,7 @@
             android:label="@string/title_activity_maps_view" />
         <activity android:name=".LocationShare.ViewActivity" />
         <activity android:name=".SensorActivity" />
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".MapActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

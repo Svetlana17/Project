@@ -8,6 +8,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,20 +31,30 @@ import com.gc.materialdesign.widgets.Dialog;
 import com.google.gson.Gson;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 public class MainActivity extends ActionBarActivity implements LocationListener, GpsStatus.Listener {
 
+    private static final String TAG ="gps" ;
     private SharedPreferences  sharedPreferences;
     private LocationManager mLocationManager;
     private static Data data;
 
     private Toolbar toolbar;
     private FloatingActionButton fab;
-    private FloatingActionButton heightbutton;
+
     private FloatingActionButton refresh;
     private ProgressBarCircularIndeterminate progressBarCircularIndeterminate;
     private TextView satellite;
@@ -59,6 +71,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     private boolean firstfix;
     private ArrayList<Location> locations=new ArrayList<>();
     private TextView height;
+    Button buttonStart ,buttonStop, buttonmessage;
+    private FileWriter writer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,21 +92,55 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         refresh = (FloatingActionButton) findViewById(R.id.refresh);
         refresh.setVisibility(View.INVISIBLE);
 
-        heightbutton=(FloatingActionButton) findViewById(R.id.fabButton);
         fab.setVisibility(View.INVISIBLE);
         height=(TextView) findViewById(R.id. height);
 
+       buttonStart=(Button) findViewById(R.id.buttonStart);
+       buttonStart.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               File file = new File(getStorageDir(), "sensors.csv");
+               if(file.exists())
+                   file.delete();
 
-        ///
-        heightbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               Intent intent1=new Intent(MainActivity.this, MapActivity.class);
-               startActivity(intent1);
-            }
-        });
+               Log.d(TAG, "Writing to " + getStorageDir());
+               try {
+                   writer = new FileWriter(file);
+                   writer.write("TIME;  Latitude; Longitude;  Speed;  Distanse; Altitutude; Accurancy;  \n");
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+           }
+       });
 
-        ///
+
+      buttonStop=(Button) findViewById(R.id.buttonStop);
+
+      buttonStop.setOnClickListener(new View.OnClickListener(){
+
+          @Override
+          public void onClick(View v) {
+              if(writer!=null) {
+                  try {
+                      writer.close();
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+              }
+          }
+      });
+
+
+
+      buttonmessage=(Button) findViewById(R.id.buttonMessage);
+      buttonmessage.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              share();
+          }
+      });
+
+
 
         onGpsServiceUpdate = new Data.OnGpsServiceUpdate() {
             @Override
@@ -192,6 +240,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         });
     }
 
+    private String getStorageDir() {
+
+            return this.getExternalFilesDir(null).getAbsolutePath();
+
+    }
+
     public void onFabClick(View v){
         if (!data.isRunning()) {
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_pause));
@@ -279,7 +333,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 //            Intent intent = new Intent(this, Settings.class);
 //            startActivity(intent);
 
-            if(id==R.id.action_settings){
+            if(id==R.id.map){
                 Intent intents = new Intent(this, MapsViewActivity.class);
                 ArrayList<Location> locations=this.locations;
                 int locationscount=locations.size();
@@ -296,17 +350,43 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             //}
         }
+        if(id==R.id.sensor){
+            Intent intent1=new Intent(this, SensorActivity.class);
+            startActivity(intent1);
+        }
         else {
-
                     Intent intent = new Intent(this, Settings.class);
                     startActivity(intent);
                   }
 
         return super.onOptionsItemSelected(item);
     }
+  SimpleDateFormat  format= new SimpleDateFormat("HH:mm:ss");
 
     @Override
     public void onLocationChanged(Location location) {
+        double distance=0;
+        if(locations.size()>0){
+           Location lastLocation=locations.get(locations.size()-1);
+           distance=lastLocation.distanceTo(location);
+        }
+  if(writer!=null) {
+      try {
+          writer.write(String.format("%s; %f; %f; %f; %f;%f;%f; \n",
+                  format.format(new Date(location.getTime())),
+                  location.getLatitude(),
+                  location.getLatitude(),
+                  location.getSpeed(),
+                  distance,
+                  location.getAltitude(),
+                  location.getAccuracy())
+          );
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+  }
+        //  writer.write("TIME;  Latitude; Longitude;  Speed;  Distanse; Altitutude;  \n");
+
         locations.add(location);
 
         if (location.hasAccuracy()) {
@@ -339,6 +419,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             double speed = location.getSpeed() * 3.6;
             String units;
             if (sharedPreferences.getBoolean("miles_per_hour", false)) { // Convert to MPH
+                // Преобразовать метры / секунды в мили / час
                 speed *= 0.62137119;
                 units = "mi/h";
             } else {
@@ -432,4 +513,54 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     @Override
     public void onProviderDisabled(String s) {}
+
+
+    //LДля кнопки отправить
+    private void share() {
+        File dir = getExternalFilesDir(null);
+        File zipFile = new File(dir, "accel.zip");
+        if (zipFile.exists()) {
+            zipFile.delete();
+        }
+        File[] fileList = dir.listFiles();
+        try {
+            zipFile.createNewFile();
+            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+            for (File file : fileList) {
+                zipFile(out, file);
+            }
+            out.close();
+            sendBundleInfo(zipFile);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Can't send file!", Toast.LENGTH_LONG).show();
+        }
+    }
+    private static void zipFile(ZipOutputStream zos, File file) throws IOException {
+        zos.putNextEntry(new ZipEntry(file.getName()));
+        FileInputStream fis = new FileInputStream(file);
+        byte[] buffer = new byte[10000];
+        int byteCount = 0;
+        try {
+            while ((byteCount = fis.read(buffer)) != -1) {
+                zos.write(buffer, 0, byteCount);
+            }
+        } finally {
+            safeClose(fis);
+        }
+        zos.closeEntry();
+    }
+
+    private static void safeClose(FileInputStream fis) {
+        try {
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void sendBundleInfo(File file) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("message/rfc822");
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file));
+        startActivity(Intent.createChooser(emailIntent, "Send data"));
+    }
 }

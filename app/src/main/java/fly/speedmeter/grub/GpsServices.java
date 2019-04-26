@@ -1,5 +1,6 @@
 package fly.speedmeter.grub;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -48,9 +49,11 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
     public void onLocationChanged(Location location) {
         data = MainActivity.getData();
         if (data.isRunning()){
+            // получить текущие значения lat и long
             currentLat = location.getLatitude();
             currentLon = location.getLongitude();
 
+            // if (в первый раз)
             if (data.isFirstTime()){
                 lastLat = currentLat;
                 lastLon = currentLon;
@@ -62,6 +65,8 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
             }
             lastlocation.setLatitude(lastLat);
             lastlocation.setLongitude(lastLon);
+            //distanceTo(Location dest)
+            //Возвращает приблизительное расстояние в метрах между этим местоположением и заданным местоположением.
             double distance = lastlocation.distanceTo(location);
 
             if (location.getAccuracy() < distance){
@@ -72,6 +77,8 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
             }
 
             if (location.hasSpeed()) {
+
+                //// вычисление скорости с помощью метода getSpeed возвращает скорость в м / с, поэтому мы конвертируем ее в км / ч
                 data.setCurSpeed(location.getSpeed() * 3.6);
                 if(location.getSpeed() == 0){
                     new isStillStopped().execute();
@@ -82,6 +89,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     public void updateNotification(boolean asData){
         Notification.Builder builder = new Notification.Builder(getBaseContext())
                 .setContentTitle(getString(R.string.running))
@@ -108,7 +116,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         // We don't provide binding, so return null
         return null;
     }
-   
+   /* Удалить обновления locationlistener, когда Службы остановлены * /
     /* Remove the locationlistener updates when Services is stopped */
     @Override
     public void onDestroy() {

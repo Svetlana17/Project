@@ -54,5 +54,6 @@
     <string name="title_activity_maps_view">Map</string>
     <string name="ANS">Automated navigation system</string>
     <string name="mapActivityGis">GisView</string>
+    <string name="height">height</string>
 
 </resources>
